@@ -6,15 +6,10 @@ import pandas as pd
 from fpdf import FPDF
 import io
 import os
-import base64
 
 # Set Streamlit page title
 st.set_page_config(page_title="Deceleration Report Generator", layout="wide")
 
-def show_pdf(pdf_file):
-    base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="700" type="application/pdf"></iframe>'
-    st.components.v1.html(pdf_display, height=720)
 
 def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
     pdf = FPDF("L", "mm", "A4")
@@ -113,17 +108,9 @@ if uploaded_file:
     
     if st.button("Generate Report"):
         pdf_file = generate_pdf(df, x_label_text, x_label_unit)
-    
-        # Show preview
-        st.subheader("📄 PDF Preview")
-        show_pdf(pdf_file)
-    
-        # Reset stream position for download
-        pdf_file.seek(0)
         st.download_button(
             label="Download PDF",
             data=pdf_file,
             file_name="export.pdf",
             mime="application/pdf"
         )
-
