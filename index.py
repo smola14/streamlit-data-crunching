@@ -8,7 +8,7 @@ import io
 import os
 
 # Set Streamlit page title
-st.set_page_config(page_title="Deceleration Report Generator", layout="wide")
+st.set_page_config(page_title="Report Generator", layout="wide")
 
 
 def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)", y_label_text="", y_label_unit=""):
