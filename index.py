@@ -47,17 +47,18 @@ def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
         fig, ax = plt.subplots(figsize=(6, 4))
         x_left, x_right, y_value = row.ĽDK, row.PDK, 3
 
-        ax.scatter(x_left, y_value, color='blue', s=200, label='Ľavá ({x_label_unit})', marker='s')
+        ax.scatter(x_left, y_value, color='blue', s=200, label=f'Ľavá {x_label_unit}', marker='s')
         ax.vlines(x_left, ymin=0, ymax=y_value, colors='blue', linestyles='dashed')
-        ax.scatter(x_right, y_value, color='green', s=200, label='Pravá ({x_label_unit})', marker='v')
+        ax.scatter(x_right, y_value, color='green', s=200, label=f'Pravá {x_label_unit}', marker='v')
         ax.vlines(x_right, ymin=0, ymax=y_value, colors='green', linestyles='dashed')
 
         if left_value > right_value:
-            ax.text(x_left + 0.6, y_value, f'{left_value} {x_label_unit}', color='blue', fontsize=12, ha='center')
-            ax.text(x_right - 0.6, y_value, f'{right_value} {x_label_unit}', color='green', fontsize=12, ha='center')
+            ax.text(x_left + 0.6, y_value, f'{left_value:.2f} {x_label_unit}', color='blue', fontsize=12, ha='center')
+            ax.text(x_right - 0.6, y_value, f'{right_value:.2f} {x_label_unit}', color='green', fontsize=12, ha='center')
         else:
-            ax.text(x_left - 0.6, y_value, f'{left_value} {x_label_unit}', color='blue', fontsize=12, ha='center')
-            ax.text(x_right + 0.6, y_value, f'{right_value} {x_label_unit}', color='green', fontsize=12, ha='center')
+            ax.text(x_left - 0.6, y_value, f'{left_value:.2f} {x_label_unit}', color='blue', fontsize=12, ha='center')
+            ax.text(x_right + 0.6, y_value, f'{right_value:.2f} {x_label_unit}', color='green', fontsize=12, ha='center')
+
 
         ax.hlines(y_value, x_left, x_right, colors='black', linestyles='dashed')
         ax.text(mean_value, y_value + 1, f'{diff_percentage:.0f}% rozdiel', fontsize=12, ha='center')
