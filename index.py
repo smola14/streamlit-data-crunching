@@ -61,7 +61,7 @@ def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
 
         ax.hlines(y_value, x_left, x_right, colors='black', linestyles='dashed')
         ax.text(mean_value, y_value + 1, f'{diff_percentage:.0f}% rozdiel', fontsize=12, ha='center')
-        ax.axvline(category_median, color='red', linewidth=3, label=f'Medián ({category_median:.2f} m/s²)')
+        ax.axvline(category_median, color='red', linewidth=3, label=f'Medián ({category_median:.2f} {x_label_unit})')
 
         ax.set_xlim(category_min, category_max)
         ax.set_xticks(np.arange(category_min, category_max + 1, 1))
