@@ -46,6 +46,10 @@ def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
         # Create the plot
         fig, ax = plt.subplots(figsize=(6, 4))
         x_left, x_right, y_value = row.ĽDK, row.PDK, 3
+        
+        ax.hlines(y_value, x_left, x_right, colors='black', linestyles='dashed')
+        ax.text(mean_value, y_value + 1, f'{diff_percentage:.0f}% rozdiel', fontsize=12, ha='center')
+        ax.axvline(category_median, color='red', linewidth=3, label=f'Medián ({category_median:.2f} {x_label_unit})')
 
         ax.scatter(x_left, y_value, color='blue', s=200, label=f'Ľavá {x_label_unit}', marker='s')
         ax.vlines(x_left, ymin=0, ymax=y_value, colors='blue', linestyles='dashed')
@@ -58,11 +62,7 @@ def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
         else:
             ax.text(x_left - 0.6, y_value, f'{left_value:.2f} {x_label_unit}', color='blue', fontsize=12, ha='center')
             ax.text(x_right + 0.6, y_value, f'{right_value:.2f} {x_label_unit}', color='green', fontsize=12, ha='center')
-
-
-        ax.hlines(y_value, x_left, x_right, colors='black', linestyles='dashed')
-        ax.text(mean_value, y_value + 1, f'{diff_percentage:.0f}% rozdiel', fontsize=12, ha='center')
-        ax.axvline(category_median, color='red', linewidth=3, label=f'Medián ({category_median:.2f} {x_label_unit})')
+        
 
         ax.set_xlim(category_min, category_max)
         ax.set_xticks(np.arange(category_min, category_max + 1, 1))
