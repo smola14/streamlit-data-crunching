@@ -11,7 +11,7 @@ import os
 st.set_page_config(page_title="Deceleration Report Generator", layout="wide")
 
 
-def generate_pdf(data):
+def generate_pdf(data, x_label_text="Decelerácia", x_label_unit="(m/s²)"):
     pdf = FPDF("L", "mm", "A4")
     pdf.add_font('OpenSans', '', 'OpenSans.ttf', uni=True)
     
@@ -47,17 +47,17 @@ def generate_pdf(data):
         fig, ax = plt.subplots(figsize=(6, 4))
         x_left, x_right, y_value = row.ĽDK, row.PDK, 3
 
-        ax.scatter(x_left, y_value, color='blue', s=200, label='Ľavá (m/s²)', marker='s')
+        ax.scatter(x_left, y_value, color='blue', s=200, label='Ľavá ({x_label_unit})', marker='s')
         ax.vlines(x_left, ymin=0, ymax=y_value, colors='blue', linestyles='dashed')
-        ax.scatter(x_right, y_value, color='green', s=200, label='Pravá (m/s²)', marker='v')
+        ax.scatter(x_right, y_value, color='green', s=200, label='Pravá ({x_label_unit})', marker='v')
         ax.vlines(x_right, ymin=0, ymax=y_value, colors='green', linestyles='dashed')
 
         if left_value > right_value:
-            ax.text(x_left + 0.6, y_value, f'{left_value} m/s²', color='blue', fontsize=12, ha='center')
-            ax.text(x_right - 0.6, y_value, f'{right_value} m/s²', color='green', fontsize=12, ha='center')
+            ax.text(x_left + 0.6, y_value, f'{left_value} {x_label_unit}', color='blue', fontsize=12, ha='center')
+            ax.text(x_right - 0.6, y_value, f'{right_value} {x_label_unit}', color='green', fontsize=12, ha='center')
         else:
-            ax.text(x_left - 0.6, y_value, f'{left_value} m/s²', color='blue', fontsize=12, ha='center')
-            ax.text(x_right + 0.6, y_value, f'{right_value} m/s²', color='green', fontsize=12, ha='center')
+            ax.text(x_left - 0.6, y_value, f'{left_value} {x_label_unit}', color='blue', fontsize=12, ha='center')
+            ax.text(x_right + 0.6, y_value, f'{right_value} {x_label_unit}', color='green', fontsize=12, ha='center')
 
         ax.hlines(y_value, x_left, x_right, colors='black', linestyles='dashed')
         ax.text(mean_value, y_value + 1, f'{diff_percentage:.0f}% rozdiel', fontsize=12, ha='center')
@@ -66,7 +66,7 @@ def generate_pdf(data):
         ax.set_xlim(category_min, category_max)
         ax.set_xticks(np.arange(category_min, category_max + 1, 1))
         ax.set_ylim(0, 6)
-        ax.set_xlabel('Decelerácia (m/s²)', fontsize=12)
+        ax.set_xlabel(f'{x_label_text} {x_label_unit}', fontsize=12)
         ax.legend(loc='upper left')
 
         img_buf = io.BytesIO()
@@ -83,6 +83,9 @@ def generate_pdf(data):
 
 # Streamlit UI
 st.title("Deceleration Report Generator")
+
+x_label_text = st.text_input("X-axis label text", value="Decelerácia")
+x_label_unit = st.text_input("X-axis unit", value="(m/s²)")
 
 
 # Download button for template Excel file
@@ -103,7 +106,7 @@ if uploaded_file:
     st.dataframe(df.head())
     
     if st.button("Generate Report"):
-        pdf_file = generate_pdf(df)
+        pdf_file = generate_pdf(df, x_label_text, x_label_unit)
         st.download_button(
             label="Download PDF",
             data=pdf_file,
