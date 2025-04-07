@@ -26,9 +26,13 @@ def generate_pdf(data):
         pdf.set_font('OpenSans', '', 16)
 
         pdf.cell(0, 10, row.Meno, ln=1, align="C", border=False)
-        pdf.cell(0, 10, row.Tím, ln=1, align="C", border=False)
-        pdf.cell(0, 10, row.Pozícia, ln=1, align="C", border=False)
-        pdf.cell(0, 10, row.Kategória, ln=1, align="C", border=False)
+        if pd.notna(row.Tím):
+            pdf.cell(0, 10, str(row.Tím), ln=1, align="C", border=False)
+        if pd.notna(row.Pozícia):
+            pdf.cell(0, 10, str(row.Pozícia), ln=1, align="C", border=False)
+        if pd.notna(row.Kategória):
+            pdf.cell(0, 10, str(row.Kategória), ln=1, align="C", border=False)
+
 
         left_value = row.ĽDK
         right_value = row.PDK
